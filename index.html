@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Game OST Versus</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <script src="https://www.youtube.com/iframe_api" defer></script>
+</head>
+
+<body>
+    <div class="top">
+        <h3 id="round">Rounds of 0 (0/0)</h3>
+        <button id="previousRoundButton" onclick="previousRound()">Redo previous round</button>
+        <button id="webhookButton" onclick="toggleWebhookModal()">Set up polls on Discord</button>
+        <button id="setupButton" onclick="toggleSetupModal()">Game Setup</button>
+    </div>
+    <div class="videos">
+        <section>
+            <div id="playerLeft" allow="autoplay;"></div>
+            <button class="big" id="titleLeft">Placeholder game title</button>
+        </section>
+        <section>
+            <div id="playerRight" allow="autoplay;"></div>
+            <button class="big" id="titleRight">Placeholder game title</button>
+        </section>
+    </div>
+    <div class="bottom"></div>
+
+    <!-- Modals -->
+
+    <div id="setupModal" class="modal">
+        <div class="modal-content">
+            <h1>The Ultimate Game OST Voting Tournament</h1>
+            <p>Find the best song of your favorite games by pitting them against each other. You will be shown two songs
+                at a time, and you pick which one you like most. The songs that you picked compete against each other in
+                another round up until one song is left victorious. Play alone or share your screen with friends!</p>
+            <p>This site contains a selection of 2048 game songs handpicked for quality by a group of people over the
+                duration of 2 years.</p>
+
+            <h2>Select how many songs you want</h2>
+            <p>Put a limit on how many songs will be picked from the games you choose.</p>
+            <select id="limitSelect">
+                <option value="32">32 songs (~1 hour session, recommended first)</option>
+                <option value="64">64 songs (~3 hour session)</option>
+                <option value="128">128 songs (~6 hour session)</option>
+                <option value="256">256 songs (~14 hour session)</option>
+                <option value="512">512 songs (~32 hour session)</option>
+                <option value="0">All songs I pick (up to ~130 hour session)</option>
+            </select>
+
+            <h2>Select the game songs</h2>
+            <p>Pick which game songs are able to show up in the tournament.</p>
+            <div id="gameSelect"></div>
+            <button class="modal-button" id="startGameButton" onclick="startGame()">Start a new game</button>
+        </div>
+    </div>
+
+    <div id="webhookModal" class="modal">
+        <div class="modal-content">
+            <h1>Set up a Discord Webhook for Polls</h1>
+            <p>Want your friends to be able to vote on the games? You can provide a Discord Webhook URL for the website
+                to automatically create polls in a Discord channel. Make sure to make a new channel, as it will be
+                spammy.</p>
+            <input id="webhookUrlInput"
+                placeholder="Enter a Webhook URL copied from the Discord channel Integration settings..."
+                type="password">
+            <button class="modal-button" onclick="toggleWebhookModal()">Cancel</button>
+            <button class="modal-button" onclick="submitWebhook()">Use this URL</button>
+        </div>
+    </div>
+
+    <div id="resultsModal" class="modal">
+        <div class="modal-content">
+            <center>
+                <h1 id="winnerText">Winner: TBD</h1>
+                <iframe id="winnerIframe" width="560" height="315" src="https://youtube.com/embed/unknown"></iframe>
+                <p>Refresh this page to start a new game!</p>
+            </center>
+            <h2>Leaderboard of all other songs</h2>
+            <div id="lostList"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>
