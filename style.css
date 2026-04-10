@@ -23,16 +23,14 @@ iframe {
     border-radius: 10px;
 }
 
-#playerLeft,
-#playerRight {
+.player {
     width: 255px;
     height: 144px;
 }
 
 @media (min-width: 1366px) {
 
-    #playerLeft,
-    #playerRight {
+    .player {
         width: 640px;
         height: 360px;
     }
@@ -40,11 +38,14 @@ iframe {
 
 @media (min-width: 1800px) {
 
-    #playerLeft,
-    #playerRight {
+    .player {
         width: 853px;
         height: 480px;
     }
+}
+
+.hidden {
+    display: none;
 }
 
 

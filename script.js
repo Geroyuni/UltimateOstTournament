@@ -72,6 +72,16 @@ function renderSongScreen() {
     if (!songs) {
         return;
     }
+    $("playerLeftBackup").classList.add("hidden");
+    $("playerRightBackup").classList.add("hidden");
+    $("playerLeftBackup").src = "";
+    $("playerRightBackup").src = "";
+    $("playerLeftBackupButton").classList.add("hidden");
+    $("playerRightBackupButton").classList.add("hidden");
+
+    playerLeft.g.classList.remove("hidden");
+    playerRight.g.classList.remove("hidden");
+
     playerLeft.loadVideoById(songs[indexLeft].urlId);
     playerRight.loadVideoById(songs[indexRight].urlId);
     $("titleLeft").textContent = songs[indexLeft].name;
@@ -408,9 +418,9 @@ function onYouTubeIframeAPIReady() {
                 unfocusTime = otherPlayer.getCurrentTime();
             }
 
-            event.target.g.className = "iFrameActive";
+            event.target.g.classList.add("iFrameActive");
             event.target.unMute();
-            otherPlayer.g.className = "";
+            otherPlayer.g.classList.remove("iFrameActive");
             otherPlayer.mute();
         });
 
@@ -420,6 +430,22 @@ function onYouTubeIframeAPIReady() {
     function onStateChangeReplay(event) {
         if (event.data === YT.PlayerState.ENDED) {
             event.target.playVideo();
+        }
+    }
+
+    function useBackupPlayerOnError(event) {
+        const errorCode = event.data;
+
+        if (errorCode === 101 || errorCode === 150) {
+            const videoUrl = event.target.getVideoUrl();
+            const videoId = videoUrl.split("=")[1];
+
+            event.target.g.classList.add("hidden");
+            $(`${event.target.g.id}Backup`).classList.remove("hidden");
+            $(`${event.target.g.id}BackupButton`).classList.remove("hidden");
+            $(`${event.target.g.id}BackupButton`).href = videoUrl;
+            $(`${event.target.g.id}Backup`).src =
+                `https://inv.thepixora.com/embed/${videoId}`;
         }
     }
 
@@ -434,7 +460,8 @@ function onYouTubeIframeAPIReady() {
         },
         events: {
             "onReady": onReadySetup,
-            "onStateChange": onStateChangeReplay
+            "onStateChange": onStateChangeReplay,
+            "onError": useBackupPlayerOnError
         }
     };
 

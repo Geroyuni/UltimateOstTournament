@@ -23,11 +23,17 @@
     </div>
     <div class="videos">
         <section>
-            <div id="playerLeft" allow="autoplay;"></div>
+            <div class="player" id="playerLeft" allow="autoplay;"></div>
+            <a class="hidden" id="playerLeftBackupButton" target="_blank">(Working around embed blocked by uploader. If
+                this fails, click to watch on YouTube)</a>
+            <iframe class="player hidden" id="playerLeftBackup"></iframe>
             <button class="big" id="titleLeft">Placeholder game title</button>
         </section>
         <section>
-            <div id="playerRight" allow="autoplay;"></div>
+            <div class="player" id="playerRight" allow="autoplay;"></div>
+            <a class="hidden" id="playerRightBackupButton" target="_blank">(Working around embed blocked by uploader. If
+                this fails, click to watch on YouTube)</a>
+            <iframe class="player hidden" id="playerRightBackup"></iframe>
             <button class="big" id="titleRight">Placeholder game title</button>
         </section>
     </div>
