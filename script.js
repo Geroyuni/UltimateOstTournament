@@ -15,6 +15,7 @@ if (ls.getItem("songs")) {
     songsLost = JSON.parse(ls.getItem("songsLost"));
     indexLeft = Number(ls.getItem("indexLeft"));
     indexRight = Number(ls.getItem("indexRight"));
+    sendWebhookPoll();
 } else {
     $("previousRoundButton").disabled = true;
     $("setupModal").classList.add("preventClose");
@@ -92,7 +93,7 @@ function previousRound() {
     sendWebhookPoll();
 }
 
-function nextRound(songLost) {
+function nextRound(songWinner, songLoser) {
     unfocusTime = 0;
     $("previousRoundButton").disabled = false;
     ls.setItem("backupSongs", JSON.stringify(songs));
@@ -100,7 +101,7 @@ function nextRound(songLost) {
     ls.setItem("backupIndexLeft", indexLeft);
     ls.setItem("backupIndexRight", indexRight);
 
-    songsLost.unshift(songLost);
+    songsLost.unshift(songLoser);
 
     if (songs.length === 2) {
         renderWinnerScreen();
@@ -123,7 +124,7 @@ function nextRound(songLost) {
     ls.setItem("indexLeft", indexLeft);
     ls.setItem("indexRight", indexRight);
     renderSongScreen();
-    sendWebhookPoll();
+    sendWebhookPoll(songWinner.name);
 }
 
 function renderWinnerScreen() {
@@ -172,36 +173,41 @@ function resetGame() {
     ls.removeItem("lastSentWebhook");
 }
 
-async function sendWebhookPoll() {
+async function sendWebhookPoll(previousSongWinnerName = '') {
     if (!ls.getItem("webhookUrl")) {
         return;
     }
 
-    pollWebhook = JSON.stringify({
+    pollWebhook = {
         "username": "Game OST Poll",
         "poll": {
             "question": { "text": getRoundText() },
             "answers": [
                 {
                     "poll_media": {
-                        "text": songs[indexLeft].name.slice(0, 50)
+                        "text": songs[indexLeft].name.slice(0, 55)
                     }
                 },
                 {
                     "poll_media": {
-                        "text": songs[indexRight].name.slice(0, 50)
+                        "text": songs[indexRight].name.slice(0, 55)
                     }
                 }
             ],
             "duration": 750
         }
-    });
+    };
+
+    if (previousSongWinnerName) {
+        pollWebhook.content = `
+            Winner of previous poll: **${previousSongWinnerName}**`;
+    }
 
     const postUrl = ls.getItem("webhookUrl") + "?wait=true";
     const postOptions = {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
-        body: pollWebhook
+        body: JSON.stringify(pollWebhook)
     };
 
     const response = await fetch(new Request(postUrl, postOptions));
@@ -227,8 +233,6 @@ async function sendWebhookPoll() {
         ${ls.getItem('webhookUrl')}/messages/${data.id}`;
 
     ls.setItem("webhookDeleteUrl", newDeleteUrl);
-
-
 }
 
 // Modals
@@ -382,10 +386,10 @@ window.onclick = (event) => {
 };
 
 $("titleLeft").addEventListener("click", () => {
-    nextRound(songs[indexRight]);
+    nextRound(songs[indexLeft], songs[indexRight]);
 });
 $("titleRight").addEventListener("click", () => {
-    nextRound(songs[indexLeft]);
+    nextRound(songs[indexRight], songs[indexLeft]);
 });
 
 
