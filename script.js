@@ -350,7 +350,7 @@ async function toggleSetupModal() {
         checkbox.checked = true;
         checkbox.onclick = toggleSelectAll;
         label.setAttribute("for", "selectAll");
-        label.innerText = `[Select all]`;
+        label.innerText = "[Select all]";
 
         $("gameSelect").appendChild(checkbox);
         $("gameSelect").appendChild(label);
