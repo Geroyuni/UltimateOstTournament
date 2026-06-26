@@ -6,6 +6,7 @@ let indexLeft = 0;
 let indexRight = 1;
 let unfocusTime = 0;
 let categorizedGames;
+let roundTimer = 0;
 
 function $(id) { return document.getElementById(id); }
 const ls = localStorage;
@@ -90,6 +91,10 @@ function previousRound() {
         return;
     }
     $("previousRoundButton").disabled = true;
+
+    roundTimer = 0;
+    $("timer").innerText = "00:00";
+
     unfocusTime = 0;
     songs = JSON.parse(ls.getItem("backupSongs"));
     songsLost = JSON.parse(ls.getItem("backupSongsLost"));
@@ -100,6 +105,9 @@ function previousRound() {
 }
 
 function nextRound(songWinner, songLoser) {
+    roundTimer = 0;
+    $("timer").innerText = "00:00";
+
     unfocusTime = 0;
     $("previousRoundButton").disabled = false;
     ls.setItem("backupSongs", JSON.stringify(songs));
@@ -168,6 +176,7 @@ function resetGame() {
     songsLost = [];
     indexLeft = 0;
     indexRight = 1;
+    roundTimer = 0;
     ls.removeItem("songs");
     ls.removeItem("songsLost");
     ls.removeItem("indexLeft");
@@ -397,6 +406,17 @@ $("titleLeft").addEventListener("click", () => {
 $("titleRight").addEventListener("click", () => {
     nextRound(songs[indexRight], songs[indexLeft]);
 });
+
+setInterval(() => {
+    roundTimer += 1;
+
+    const minutes = Math.floor(roundTimer / 60);
+    const seconds = Math.floor(roundTimer - (minutes * 60));
+    const minutesFmt = String(minutes).padStart(2, '0');
+    const secondsFmt = String(seconds).padStart(2, '0');
+
+    $("timer").innerText = `${minutesFmt}:${secondsFmt}`;
+}, 1000);
 
 
 // Prepare YouTube iFrames
