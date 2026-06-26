@@ -72,10 +72,6 @@ function renderSongScreen() {
     if (!songs) {
         return;
     }
-    $("playerLeftBackup").classList.add("hidden");
-    $("playerRightBackup").classList.add("hidden");
-    $("playerLeftBackup").src = "";
-    $("playerRightBackup").src = "";
     $("playerLeftBackupButton").classList.add("hidden");
     $("playerRightBackupButton").classList.add("hidden");
 
@@ -435,17 +431,13 @@ function onYouTubeIframeAPIReady() {
 
     function useBackupPlayerOnError(event) {
         const errorCode = event.data;
+        const isLeftPlayer = (playerLeft === event.target);
+        const songName = songs[isLeftPlayer ? indexLeft : indexRight].name;
 
         if (errorCode === 101 || errorCode === 150) {
-            const videoUrl = event.target.getVideoUrl();
-            const videoId = videoUrl.split("=")[1];
-
-            event.target.g.classList.add("hidden");
-            $(`${event.target.g.id}Backup`).classList.remove("hidden");
             $(`${event.target.g.id}BackupButton`).classList.remove("hidden");
-            $(`${event.target.g.id}BackupButton`).href = videoUrl;
-            $(`${event.target.g.id}Backup`).src =
-                `https://inv.thepixora.com/embed/${videoId}`;
+            $(`${event.target.g.id}BackupButton`).href =
+                `https://www.youtube.com/results?search_query=${songName}`;
         }
     }
 
