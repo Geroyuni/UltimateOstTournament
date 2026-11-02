@@ -76,8 +76,8 @@ function renderSongScreen() {
     $("playerLeftBackupButton").classList.add("hidden");
     $("playerRightBackupButton").classList.add("hidden");
 
-    playerLeft.g.classList.remove("hidden");
-    playerRight.g.classList.remove("hidden");
+    playerLeft.getIframe().classList.remove("hidden");
+    playerRight.getIframe().classList.remove("hidden");
 
     playerLeft.loadVideoById(songs[indexLeft].urlId);
     playerRight.loadVideoById(songs[indexRight].urlId);
@@ -434,9 +434,9 @@ function onYouTubeIframeAPIReady() {
                 unfocusTime = otherPlayer.getCurrentTime();
             }
 
-            event.target.g.classList.add("iFrameActive");
+            event.target.getIframe().classList.add("iFrameActive");
             event.target.unMute();
-            otherPlayer.g.classList.remove("iFrameActive");
+            otherPlayer.getIframe().classList.remove("iFrameActive");
             otherPlayer.mute();
         });
 
@@ -455,8 +455,9 @@ function onYouTubeIframeAPIReady() {
         const songName = songs[isLeftPlayer ? indexLeft : indexRight].name;
 
         if (errorCode === 101 || errorCode === 150) {
-            $(`${event.target.g.id}BackupButton`).classList.remove("hidden");
-            $(`${event.target.g.id}BackupButton`).href =
+            $(`${event.target.getIframe().id}BackupButton`).classList.remove(
+                "hidden");
+            $(`${event.target.getIframe().id}BackupButton`).href =
                 `https://www.youtube.com/results?search_query=${songName}`;
         }
     }
